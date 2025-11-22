@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Island Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="min-h-screen">
+    <!-- Enhanced Loading Screen -->
+    <div id="loadingScreen">
+      <div class="loading-container">
+        <div class="island-loader">
+          <div class="bg-[#ffd700] w-20 h-20 top-30 right-44" id="sun"></div>
+          <div class="cloud cloud1"></div>
+          <div class="cloud cloud1"></div>
+          <div class="palm-tree">
+            <div class="trunk"></div>
+            <div class="leaves"></div>
+          </div>
+          <div class="island"></div>
+          <div class="water"></div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-2">Island Explorer</h2>
+        <p class="mb-6">Preparing your tropical adventure...</p>
+
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="loading-text">
+          <span id="loadingMessage">Loading island assets</span>
+          <span class="loading-dots"></span>
+        </div>
+
+        <div class="loading-tips">
+          <p id="tipText">
+            Did you know? The Maldives is the flattest country in the world.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Island Detail Modal -->
+    <div id="islandModal" class="modal">
+      <div class="modal-content">
+        <button class="close-modal" onclick="closeIslandModal()">×</button>
+        <div id="islandModalContent"></div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-4">
+      <header class="text-center pt-4 pb-10">
+        <h1 class="text-6xl font-extrabold text-blue-800 mb-2">
+          🏝️ Island Explorer
+        </h1>
+        <p class="text-gray-800 text-2xl tracking-wide font-bold">
+          Discover Tropical Paradise
+        </p>
+      </header>
+
+      <!-- Main Menu -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <button
+          onclick="showScreen('islandsScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🗺️</div>
+          <h3 class="text-blue-800 font-semibold">Island Directory</h3>
+        </button>
+
+        <button
+          onclick="showScreen('quizScreen'); loadQuestion();"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">❓</div>
+          <h3 class="text-green-700 font-semibold">Island Quiz</h3>
+        </button>
+
+        <button
+          onclick="showScreen('travelScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🧳</div>
+          <h3 class="text-amber-700 font-semibold">Travel Tips</h3>
+        </button>
+
+        <!-- Mini-game Buttons -->
+        <button
+          onclick="showScreen('memoryScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🧠</div>
+          <h3 class="text-purple-700 font-semibold">Memory Match</h3>
+        </button>
+
+        <button
+          onclick="showScreen('scrambleScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🔤</div>
+          <h3 class="text-red-600 font-semibold">Word Scramble</h3>
+        </button>
+
+        <button
+          onclick="showScreen('explorerScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🧭</div>
+          <h3 class="text-indigo-700 font-semibold">Island Match</h3>
+        </button>
+
+        <button
+          onclick="showScreen('puzzleScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🧩</div>
+          <h3 class="text-teal-700 font-semibold">Island Puzzle</h3>
+        </button>
+
+        <!-- Two New Game Buttons -->
+        <button
+          onclick="showScreen('treasureScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">💰</div>
+          <h3 class="text-yellow-600 font-semibold">Treasure Hunt</h3>
+        </button>
+
+        <button
+          onclick="showScreen('survivalScreen')"
+          class="card text-center cursor-pointer hover:shadow-lg"
+        >
+          <div class="text-4xl mb-2">🏕️</div>
+          <h3 class="text-orange-700 font-semibold">Island Survival</h3>
+        </button>
+      </div>
+
+      <!-- Screens -->
+      <div id="islandsScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-blue-800 font-bold text-2xl">Island Directory</h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Original Islands -->
+            <div
+              class="island-card bg-blue-100 p-4 rounded-lg"
+              onclick="showIslandDetails('maldives')"
+            >
+              <h3 class="text-blue-800 font-semibold mb-2">🏝️ Maldives</h3>
+              <p class="text-gray-600 text-sm">
+                Tropical paradise with crystal-clear waters and over water
+                bungalows.
+              </p>
+              <p class="text-blue-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-green-100 p-4 rounded-lg"
+              onclick="showIslandDetails('easter')"
+            >
+              <h3 class="text-green-700 font-semibold mb-2">
+                🗿 Easter Island
+              </h3>
+              <p class="text-gray-600 text-sm">
+                Famous for its mysterious Moai statues and Polynesian culture.
+              </p>
+              <p class="text-green-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-amber-100 p-4 rounded-lg"
+              onclick="showIslandDetails('iceland')"
+            >
+              <h3 class="text-amber-700 font-semibold mb-2">🏔️ Iceland</h3>
+              <p class="text-gray-600 text-sm">
+                Land of fire and ice with volcanoes, geysers, and northern
+                lights.
+              </p>
+              <p class="text-amber-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <!-- Indian Islands -->
+            <div
+              class="island-card bg-purple-100 p-4 rounded-lg"
+              onclick="showIslandDetails('andaman')"
+            >
+              <h3 class="text-purple-700 font-semibold mb-2">
+                🏝️ Andaman & Nicobar Islands
+              </h3>
+              <p class="text-gray-600 text-sm">
+                Pristine beaches, coral reefs, and rich biodiversity in the Bay
+                of Bengal.
+              </p>
+              <p class="text-purple-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-pink-100 p-4 rounded-lg"
+              onclick="showIslandDetails('lakshadweep')"
+            >
+              <h3 class="text-pink-700 font-semibold mb-2">
+                🏝️ Lakshadweep Islands
+              </h3>
+              <p class="text-gray-600 text-sm">
+                Coral atolls with turquoise lagoons in the Arabian Sea.
+              </p>
+              <p class="text-pink-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-emerald-100 p-4 rounded-lg"
+              onclick="showIslandDetails('majuli')"
+            >
+              <h3 class="text-emerald-800 font-semibold mb-2">
+                🏝️ Majuli Island
+              </h3>
+              <p class="text-gray-600 text-sm">
+                World's largest river island in Assam, known for Vaishnavite
+                culture.
+              </p>
+              <p class="text-emerald-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-yellow-100 p-4 rounded-lg"
+              onclick="showIslandDetails('diu')"
+            >
+              <h3 class="text-yellow-700 font-semibold mb-2">🏝️ Diu Island</h3>
+              <p class="text-gray-600 text-sm">
+                Portuguese-influenced island with beautiful beaches and historic
+                forts.
+              </p>
+              <p class="text-yellow-600 text-xs mt-2">Click for more info</p>
+            </div>
+            <div
+              class="island-card bg-cyan-100 p-4 rounded-lg"
+              onclick="showIslandDetails('santorini')"
+            >
+              <h3 class="text-cyan-700 font-semibold mb-2">🏛️ Santorini</h3>
+              <p class="text-gray-600 text-sm">
+                Greek island with whitewashed buildings, blue domes, and
+                stunning caldera views.
+              </p>
+              <p class="text-cyan-600 text-xs mt-2">Click for more info</p>
+            </div>
+
+            <div
+              class="island-card bg-orange-100 p-4 rounded-lg"
+              onclick="showIslandDetails('bali')"
+            >
+              <h3 class="text-orange-700 font-semibold mb-2">🛕 Bali</h3>
+              <p class="text-gray-600 text-sm">
+                Indonesian island known for its volcanic mountains, rice
+                terraces, and Hindu culture.
+              </p>
+              <p class="text-orange-600 text-xs mt-2">Click for more info</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="quizScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-green-700 font-bold text-2xl">Island Quiz</h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="quizContent">
+            <h3 id="quizQuestion" class="mb-4 text-lg font-medium"></h3>
+            <div id="quizOptions" class="space-y-2"></div>
+            <div id="quizFeedback" class="my-4 p-3 rounded-lg hidden"></div>
+            <button
+              id="quizNext"
+              onclick="nextQuestion()"
+              class="btn mt-4"
+              disabled
+            >
+              Next Question
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="travelScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-amber-700 font-bold text-2xl">
+              Travel Tips & Essentials
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Planning & Preparation -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-amber-800 mb-4 flex items-center gap-2"
+              >
+                📋 Planning & Preparation
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">📅</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Book in Advance</h4>
+                    <p class="text-gray-600 text-sm">
+                      Reserve accommodations and activities 2-3 months ahead,
+                      especially for peak season.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-green-100 p-2 rounded-lg text-lg mt-1">🛂</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Check Documentation</h4>
+                    <p class="text-gray-600 text-sm">
+                      Ensure passport validity (6+ months), visas, and required
+                      permits for restricted areas.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Health & Safety -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-red-800 mb-4 flex items-center gap-2"
+              >
+                🏥 Health & Safety
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-red-100 p-2 rounded-lg text-lg mt-1">💊</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Medical Kit</h4>
+                    <p class="text-gray-600 text-sm">
+                      Pack seasickness medication, pain relievers, antiseptics,
+                      and any personal prescriptions.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-yellow-100 p-2 rounded-lg text-lg mt-1">
+                    ☀️
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Sun Protection</h4>
+                    <p class="text-gray-600 text-sm">
+                      Use reef-safe SPF 50+ sunscreen, reapply every 2 hours,
+                      and wear UV-protective clothing.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">💧</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Stay Hydrated</h4>
+                    <p class="text-gray-600 text-sm">
+                      Drink 2-3 liters of water daily. Avoid tap water in some
+                      destinations.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-purple-100 p-2 rounded-lg text-lg mt-1">
+                    🏥
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Travel Insurance</h4>
+                    <p class="text-gray-600 text-sm">
+                      Comprehensive coverage for medical emergencies, trip
+                      cancellations, and water activities.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Packing Essentials -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-green-800 mb-4 flex items-center gap-2"
+              >
+                🧳 Packing Essentials
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-green-100 p-2 rounded-lg text-lg mt-1">👕</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Light Clothing</h4>
+                    <p class="text-gray-600 text-sm">
+                      Quick-dry fabrics, light colors, modest attire for
+                      cultural sites, and swimwear.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-amber-100 p-2 rounded-lg text-lg mt-1">🥾</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Footwear</h4>
+                    <p class="text-gray-600 text-sm">
+                      Water shoes for coral beaches, hiking sandals, and
+                      comfortable walking shoes.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">📷</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Gear & Electronics</h4>
+                    <p class="text-gray-600 text-sm">
+                      Waterproof phone case, power bank, universal adapter, and
+                      underwater camera.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-red-100 p-2 rounded-lg text-lg mt-1">🕶️</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Accessories</h4>
+                    <p class="text-gray-600 text-sm">
+                      Polarized sunglasses, wide-brim hat, reusable water
+                      bottle, and dry bag.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Water & Marine Safety -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-blue-800 mb-4 flex items-center gap-2"
+              >
+                🌊 Water & Marine Safety
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">🏊</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Swimming Safety</h4>
+                    <p class="text-gray-600 text-sm">
+                      Never swim alone, check tide schedules, and be aware of
+                      rip currents and marine life.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-purple-100 p-2 rounded-lg text-lg mt-1">
+                    🐠
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Marine Conservation</h4>
+                    <p class="text-gray-600 text-sm">
+                      Don't touch coral, maintain buoyancy control, and avoid
+                      standing on reef areas.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-green-100 p-2 rounded-lg text-lg mt-1">🤿</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Snorkeling Tips</h4>
+                    <p class="text-gray-600 text-sm">
+                      Use defogger for mask, practice breathing, and always
+                      snorkel with a buddy.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-red-100 p-2 rounded-lg text-lg mt-1">⚡</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Boat Safety</h4>
+                    <p class="text-gray-600 text-sm">
+                      Wear life jackets, listen to safety briefings, and know
+                      emergency procedures.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cultural & Local Etiquette -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-purple-800 mb-4 flex items-center gap-2"
+              >
+                🌍 Cultural & Local Etiquette
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-purple-100 p-2 rounded-lg text-lg mt-1">
+                    🙏
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Respect Customs</h4>
+                    <p class="text-gray-600 text-sm">
+                      Learn basic local greetings, dress modestly in villages,
+                      and ask before photographing people.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-amber-100 p-2 rounded-lg text-lg mt-1">💰</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Local Economy</h4>
+                    <p class="text-gray-600 text-sm">
+                      Support local businesses, bargain respectfully, and carry
+                      small denominations of local currency.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-green-100 p-2 rounded-lg text-lg mt-1">🌱</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Environmental Respect</h4>
+                    <p class="text-gray-600 text-sm">
+                      Follow 'leave no trace' principles, use reef-safe
+                      products, and minimize plastic use.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">📵</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">
+                      Technology & Connectivity
+                    </h4>
+                    <p class="text-gray-600 text-sm">
+                      Check network coverage, download offline maps, and respect
+                      digital detox opportunities.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Money & Budget Tips -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-green-800 mb-4 flex items-center gap-2"
+              >
+                💰 Money & Budget Tips
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-green-100 p-2 rounded-lg text-lg mt-1">💳</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Payment Methods</h4>
+                    <p class="text-gray-600 text-sm">
+                      Carry mix of cash/cards. Notify bank of travel plans. ATMs
+                      may be limited on small islands.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-yellow-100 p-2 rounded-lg text-lg mt-1">
+                    🍽️
+                  </div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Dining Smart</h4>
+                    <p class="text-gray-600 text-sm">
+                      Try local eateries for authentic food, check menu prices,
+                      and ask about included taxes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Emergency Preparedness -->
+            <div class="bg-white p-4 rounded-lg shadow-sm">
+              <h3
+                class="text-xl font-bold text-red-800 mb-4 flex items-center gap-2"
+              >
+                🚨 Emergency Preparedness
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex gap-3 items-start">
+                  <div class="bg-red-100 p-2 rounded-lg text-lg mt-1">📞</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Emergency Contacts</h4>
+                    <p class="text-gray-600 text-sm">
+                      Save local emergency numbers, embassy contacts, and your
+                      accommodation's address.
+                    </p>
+                  </div>
+                </div>
+                <div class="flex gap-3 items-start">
+                  <div class="bg-blue-100 p-2 rounded-lg text-lg mt-1">🗺️</div>
+                  <div>
+                    <h4 class="font-semibold mb-1">Navigation</h4>
+                    <p class="text-gray-600 text-sm">
+                      Share itinerary with someone, carry physical map backup,
+                      and know evacuation routes.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Tips Summary -->
+            <div class="bg-amber-50 p-4 rounded-lg border-l-4 border-amber-500">
+              <h3 class="text-lg font-bold text-amber-800 mb-3">
+                🌟 Quick Island Travel Checklist
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Check weather and sea conditions daily</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Keep digital copies of important documents</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Stay updated on local news and advisories</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Respect wildlife viewing distances</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Learn basic first aid and CPR</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-green-500">✓</span>
+                  <span>Pack motion sickness remedies for boat trips</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Minigame Screens -->
+      <!-- Enhanced Memory Match Screen -->
+      <div id="memoryScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-purple-700 font-bold text-2xl">
+              🧠 Memory Match - Arcade Edition
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="memoryContent">
+            <!-- Game mode selector will be added here by JavaScript -->
+
+            <!-- Game Stats and Power-ups -->
+            <div class="memory-header mb-6">
+              <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4"
+              >
+                <div class="memory-stats flex gap-6">
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-purple-600"
+                      id="memoryScore"
+                    >
+                      0
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">Moves</div>
+                  </div>
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-green-600"
+                      id="memoryMatches"
+                    >
+                      0/8
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">Matches</div>
+                  </div>
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-yellow-600"
+                      id="memoryCoins"
+                    >
+                      100
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">Coins</div>
+                  </div>
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-blue-600"
+                      id="comboMultiplier"
+                    >
+                      x1
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">Combo</div>
+                  </div>
+                </div>
+
+                <div class="memory-powerups flex flex-wrap gap-2">
+                  <button
+                    id="peekBtn"
+                    onclick="usePeekPowerup()"
+                    class="powerup-btn memory-powerup"
+                    disabled
+                  >
+                    👁️ Peek
+                  </button>
+                  <button
+                    id="freezeBtn"
+                    onclick="useFreezePowerup()"
+                    class="powerup-btn memory-powerup"
+                    disabled
+                  >
+                    ❄️ Freeze
+                  </button>
+                  <button
+                    id="shuffleBtn"
+                    onclick="useShufflePowerup()"
+                    class="powerup-btn memory-powerup"
+                    disabled
+                  >
+                    🔄 Shuffle
+                  </button>
+                  <button
+                    id="magnetBtn"
+                    onclick="useMagnetPowerup()"
+                    class="powerup-btn memory-powerup"
+                    disabled
+                  >
+                    🧲 Magnet
+                  </button>
+                </div>
+              </div>
+
+              <!-- Timer -->
+              <div class="timer-container mb-2">
+                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                  <span>Time: <span id="memoryTimer">60</span>s</span>
+                  <span>Best: <span id="memoryBestTime">0</span>s</span>
+                </div>
+                <div class="progress-bar bg-gray-200 rounded-full h-3">
+                  <div
+                    id="memoryTimeProgress"
+                    class="progress-fill bg-blue-500 h-3 rounded-full transition-all duration-1000"
+                    style="width: 100%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game Grid -->
+            <div id="memoryGrid" class="memory-grid mb-6"></div>
+
+            <!-- Active Power-up Indicator -->
+            <div
+              id="activePowerup"
+              class="active-powerup-indicator hidden mb-4 p-3 bg-purple-100 rounded-lg text-center"
+            >
+              <span
+                id="activePowerupText"
+                class="font-semibold text-purple-800"
+              ></span>
+            </div>
+
+            <!-- Game Feedback -->
+            <div
+              id="memoryFeedback"
+              class="memory-feedback my-4 p-3 rounded-lg hidden"
+            ></div>
+
+            <!-- Control Buttons -->
+            <div class="flex justify-center gap-4">
+              <button
+                id="memoryStart"
+                onclick="startMemoryGame()"
+                class="btn bg-purple-600 hover:bg-purple-700"
+              >
+                Start Game
+              </button>
+              <button
+                id="memoryReset"
+                onclick="resetMemoryGame()"
+                class="btn bg-gray-600 hover:bg-gray-700 hidden"
+              >
+                Restart Game
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Island Match Screen -->
+      <div id="explorerScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-indigo-700 font-bold text-2xl">
+              🧭 Island Explorer
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="islandMatchContent">
+            <!-- Educational mode selector will be added here by JavaScript -->
+
+            <!-- Passport Preview -->
+            <div id="passportPreview" class="mb-6"></div>
+
+            <div class="text-center mb-6">
+              <p class="text-gray-600 mb-8">
+                Match islands to learn facts and collect passport stamps!
+              </p>
+
+              <div class="flex justify-center space-x-4 mb-4">
+                <div class="stat-box">
+                  <span class="stat-label">Moves</span>
+                  <span id="matchMoves" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label">Pairs</span>
+                  <span id="matchPairs" class="stat-value">0/6</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-label">Discovered</span>
+                  <span id="islandsDiscovered" class="stat-value">0</span>
+                </div>
+              </div>
+              <div
+                class="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-md mx-auto"
+              >
+                <div
+                  id="matchProgress"
+                  class="bg-green-500 h-2 rounded-full transition-all duration-300"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+
+            <div id="islandMatchGrid" class="island-match-grid mb-6"></div>
+
+            <div id="matchFeedback" class="mb-6"></div>
+
+            <div class="text-center space-y-4">
+              <button
+                id="islandMatchStart"
+                onclick="startIslandMatch()"
+                class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold"
+              >
+                Start Exploration
+              </button>
+              <button
+                id="islandMatchReset"
+                onclick="resetIslandMatch()"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hidden"
+              >
+                Explore Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="scrambleScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-red-600 font-bold text-2xl">
+              Island Word Scramble
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="scrambleContent">
+            <p class="mb-4">Unscramble the island-related word!</p>
+            <div id="scrambledWord" class="scrambled-word"></div>
+            <input
+              type="text"
+              id="scrambleInput"
+              class="scramble-input"
+              placeholder="Type your answer here"
+            />
+            <div id="scrambleFeedback" class="my-4 p-3 rounded-lg hidden"></div>
+            <div class="flex justify-center gap-4 mt-4">
+              <button
+                id="scrambleCheck"
+                onclick="checkScrambleAnswer()"
+                class="btn"
+              >
+                Check Answer
+              </button>
+              <button
+                id="scrambleHint"
+                onclick="showHint()"
+                class="btn bg-yellow-500 hover:bg-yellow-600"
+              >
+                Get Hint
+              </button>
+              <button
+                id="scrambleNext"
+                onclick="nextScrambleWord()"
+                class="btn"
+              >
+                Next Word
+              </button>
+            </div>
+            <div id="hintText" class="hint-text hidden"></div>
+            <p id="scrambleScore" class="mt-4 text-lg font-semibold">
+              Score: 0
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Island Match Game Screen -->
+      <div
+        id="explorerScreen"
+        class="screen container mx-auto px-4 py-8 hidden"
+      >
+        <div class="max-w-4xl mx-auto">
+          <h2 class="text-3xl font-bold text-center mb-6">🔍 Island Match</h2>
+          <p class="text-center text-gray-600 mb-8">
+            Tap cards to match islands with their emojis and learn fun facts!
+          </p>
+
+          <div class="text-center mb-6">
+            <div class="flex justify-center space-x-4 mb-4">
+              <div class="stat-box">
+                <span class="stat-label">Moves</span>
+                <span id="matchMoves" class="stat-value">0</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Pairs</span>
+                <span id="matchPairs" class="stat-value">0/6</span>
+              </div>
+            </div>
+            <div
+              class="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-md mx-auto"
+            >
+              <div
+                id="matchProgress"
+                class="bg-green-500 h-2 rounded-full transition-all duration-300"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <div id="islandMatchGrid" class="island-match-grid hidden mb-6"></div>
+
+          <div id="matchFeedback" class="mb-6"></div>
+
+          <div class="text-center space-y-4">
+            <button
+              id="islandMatchStart"
+              onclick="startIslandMatch()"
+              class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg text-lg font-semibold"
+            >
+              Start Game
+            </button>
+            <button
+              id="islandMatchReset"
+              onclick="resetIslandMatch()"
+              class="bg-blue-500 hover:bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hidden"
+            >
+              Play Again
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="puzzleScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-teal-700 font-bold text-2xl">Island Fact Puzzle</h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="puzzleContent">
+            <div class="flex justify-between items-center mb-4">
+              <p id="puzzleScore" class="text-lg font-semibold">
+                Puzzles Solved: 0
+              </p>
+              <button id="puzzleReset" onclick="resetPuzzle()" class="btn">
+                New Puzzle
+              </button>
+            </div>
+
+            <div id="puzzleInstructions" class="mb-4 p-3 bg-blue-50 rounded-lg">
+              <p class="text-sm">
+                Drag and drop the words to complete the island fact correctly!
+              </p>
+            </div>
+
+            <div id="puzzleContainer" class="puzzle-container mb-6">
+              <div
+                id="puzzleSentence"
+                class="puzzle-sentence mb-4 p-4 bg-gray-100 rounded-lg"
+              ></div>
+              <div
+                id="puzzleWords"
+                class="puzzle-words flex flex-wrap gap-2 justify-center p-4 bg-gray-50 rounded-lg min-h-20"
+              ></div>
+            </div>
+
+            <div
+              id="puzzleFeedback"
+              class="puzzle-feedback my-4 p-3 rounded-lg hidden"
+            ></div>
+
+            <button id="puzzleCheck" onclick="checkPuzzle()" class="btn">
+              Check Answer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two New Game Screens -->
+      <!-- Treasure Hunt Game Screen -->
+      <div id="treasureScreen" class="screen">
+        <div
+          class="card bg-gradient-to-br from-amber-50 to-yellow-100 border-2 border-amber-200"
+        >
+          <div class="flex justify-between items-center mb-6">
+            <h2
+              class="text-yellow-700 font-bold text-3xl flex items-center gap-3"
+            >
+              🏴‍☠️ Educational Treasure Hunt
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center hover:bg-red-600 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="treasureContent">
+            <div class="treasure-header mb-6">
+              <div
+                class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4"
+              >
+                <div class="treasure-stats flex gap-6">
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-yellow-600"
+                      id="treasureScore"
+                    >
+                      0
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">
+                      Gold Coins
+                    </div>
+                  </div>
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-blue-600"
+                      id="treasureMoves"
+                    >
+                      20
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">
+                      Moves Left
+                    </div>
+                  </div>
+                  <div class="stat text-center">
+                    <div
+                      class="stat-value text-2xl font-bold text-green-600"
+                      id="treasuresFound"
+                    >
+                      0/3
+                    </div>
+                    <div class="stat-label text-sm text-gray-600">
+                      Treasures
+                    </div>
+                  </div>
+                </div>
+                <div class="treasure-powerups flex gap-2">
+                  <button
+                    id="compassBtn"
+                    onclick="useCompass()"
+                    class="powerup-btn"
+                    title="Compass - Better clues (Cost: 15 coins)"
+                    disabled
+                  >
+                    🧭
+                  </button>
+                  <button
+                    id="shovelBtn"
+                    onclick="useShovel()"
+                    class="powerup-btn"
+                    title="Shovel - Dig 3 squares (Cost: 20 coins)"
+                    disabled
+                  >
+                    ⛏️
+                  </button>
+                  <button
+                    id="mapBtn"
+                    onclick="useMap()"
+                    class="powerup-btn"
+                    title="Treasure Map - Reveal location (Cost: 25 coins)"
+                    disabled
+                  >
+                    🗺️
+                  </button>
+                </div>
+              </div>
+
+              <div class="progress-container mb-2">
+                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                  <span>Exploration Progress</span>
+                  <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar bg-gray-200 rounded-full h-3">
+                  <div
+                    id="treasureProgress"
+                    class="progress-fill h-3 rounded-full transition-all duration-500"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="treasure-game-area mb-6">
+              <div class="treasure-map-container">
+                <div id="treasureMap" class="treasure-map"></div>
+              </div>
+            </div>
+
+            <div id="treasureClue" class="treasure-clue mb-4 p-4">
+              <p class="text-sm font-medium">
+                Welcome! Click squares to explore. Find 3 treasures to win!
+              </p>
+            </div>
+
+            <div id="educationalFact" class="educational-fact hidden">
+              <h4 class="font-semibold text-green-800 mb-2">
+                🌿 Island Ecology Fact
+              </h4>
+              <p id="factText" class="text-sm"></p>
+            </div>
+
+            <div id="artifactInfo" class="artifact-info hidden">
+              <h4 class="font-semibold text-purple-800 mb-2">
+                🏺 Ancient Artifact Discovered!
+              </h4>
+              <p id="artifactText" class="text-sm"></p>
+            </div>
+
+            <div id="fossilInfo" class="fossil-info hidden">
+              <h4 class="font-semibold text-gray-800 mb-2">
+                🦴 Fossil Discovery!
+              </h4>
+              <p id="fossilText" class="text-sm"></p>
+            </div>
+
+            <div
+              id="treasureFeedback"
+              class="treasure-feedback my-4 p-4 rounded-lg hidden"
+            ></div>
+
+            <div class="flex justify-center gap-4 mt-6">
+              <button
+                id="treasureStart"
+                onclick="startTreasureHunt()"
+                class="btn bg-yellow-600 hover:bg-yellow-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              >
+                Start Treasure Hunt
+              </button>
+              <button
+                id="treasureReset"
+                onclick="resetTreasureHunt()"
+                class="btn bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors hidden"
+              >
+                Play Again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="survivalScreen" class="screen">
+        <div class="card">
+          <div class="flex justify-between items-center mb-6">
+            <h2 class="text-orange-700 font-bold text-2xl">
+              Island Survival Challenge
+            </h2>
+            <button
+              onclick="hideScreens()"
+              class="bg-red-500 text-white border-none w-8 h-8 rounded-full cursor-pointer flex items-center justify-center"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="survivalContent">
+            <div
+              class="survival-stats grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
+            >
+              <div class="stat-item text-center p-3 bg-orange-50 rounded-lg">
+                <div
+                  class="stat-value text-2xl font-bold text-orange-700"
+                  id="healthStat"
+                >
+                  100
+                </div>
+                <div class="stat-label text-sm text-orange-600">Health</div>
+              </div>
+              <div class="stat-item text-center p-3 bg-blue-50 rounded-lg">
+                <div
+                  class="stat-value text-2xl font-bold text-blue-700"
+                  id="hungerStat"
+                >
+                  100
+                </div>
+                <div class="stat-label text-sm text-blue-600">Hunger</div>
+              </div>
+              <div class="stat-item text-center p-3 bg-green-50 rounded-lg">
+                <div
+                  class="stat-value text-2xl font-bold text-green-700"
+                  id="thirstStat"
+                >
+                  100
+                </div>
+                <div class="stat-label text-sm text-green-600">Thirst</div>
+              </div>
+              <div class="stat-item text-center p-3 bg-purple-50 rounded-lg">
+                <div
+                  class="stat-value text-2xl font-bold text-purple-700"
+                  id="dayStat"
+                >
+                  1
+                </div>
+                <div class="stat-label text-sm text-purple-600">Day</div>
+              </div>
+            </div>
+
+            <div
+              id="survivalScenario"
+              class="survival-scenario mb-6 p-4 bg-gray-100 rounded-lg"
+            >
+              <h3 class="text-lg font-semibold mb-3" id="scenarioTitle">
+                Welcome to Island Survival!
+              </h3>
+              <p id="scenarioDescription" class="mb-4">
+                You're stranded on a tropical island. Make smart choices to
+                survive as long as possible!
+              </p>
+              <div
+                id="scenarioOptions"
+                class="scenario-options grid grid-cols-1 md:grid-cols-2 gap-3"
+              ></div>
+            </div>
+
+            <div
+              id="survivalFeedback"
+              class="survival-feedback my-4 p-3 rounded-lg hidden"
+            ></div>
+
+            <div class="flex justify-center gap-4">
+              <button
+                id="survivalStart"
+                onclick="startSurvivalGame()"
+                class="btn bg-orange-600 hover:bg-orange-700"
+              >
+                Start Survival
+              </button>
+              <button
+                id="survivalNext"
+                onclick="nextSurvivalDay()"
+                class="btn hidden"
+              >
+                Next Day
+              </button>
+            </div>
+
+            <div
+              id="survivalInventory"
+              class="survival-inventory mt-6 p-4 bg-gray-50 rounded-lg hidden"
+            >
+              <h4 class="font-semibold mb-2">Inventory:</h4>
+              <div id="inventoryItems" class="flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Audio elements for sound effects -->
+    <audio id="correctSound" src="correct-6033.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="wrong-47985 - Copy.mp3" preload="auto"></audio>
+
+    <script src="app.js"></script>
+  </body>
+</html>
